@@ -20,7 +20,8 @@ describe("User get test", ()=>{
     })
 
     it("Should return all users", async ()=>{
-        const l = await userDao.getAllUsers.length;
+        const users = await userDao.getAllUsers();
+        const l = users.length; 
         //need to import as an array (or is it an object with a name or is it the bgael)
         const user1:User = {username:'testmgr',password:'password',id:'',isAuthenticated:true,isManager:true,reimbs:['001']}
         const user2:User = {username:'testemp',password:'password',id:'',isAuthenticated:true,isManager:false,reimbs:['002','003']}
@@ -40,12 +41,14 @@ describe("User get test", ()=>{
     it("Should delete a User", async ()=>{
 
         //need to delete all their reimbs too
-        const l = await userDao.getAllUsers.length;
+        const users = await userDao.getAllUsers();
+        const l = users.length;
+        
         await userDao.delUser({username:'testmgr',password:'password',id:'',isAuthenticated:true,isManager:true,reimbs:['001']})
         await userDao.delUser({username:'testemp',password:'password',id:'',isAuthenticated:true,isManager:true,reimbs:['001']})
         await userDao.delUser({username:'testhacker',password:'password',id:'',isAuthenticated:true,isManager:true,reimbs:['001']})
         
-        expect(l === (await userDao.getAllUsers.length - 3));
+        expect(users.length === (l - 3));
 
     })
     

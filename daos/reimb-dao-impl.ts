@@ -48,8 +48,8 @@ export class ReimbDaoImpl implements ReimbDao{
         // MOVE THIS TO SERVICES but dont break it
         try {
         //get the reimb to be deleted
-        const tempReimb:Reimb = reimbs.find(r => r.id === reimb.id);
-        const id = tempReimb.id;
+        const tempReimb:Reimb = reimbs.find(r => r.desc === reimb.desc);
+        const desc = tempReimb.desc; //unused?
         //if not null, shift values AFTER this one up (covering it), reduce length by 1
         if(tempReimb.id === reimb.id){
             for(let i = reimbs.indexOf(tempReimb);i < reimbs.length; i++) reimbs[i] = reimbs[i+1];
@@ -70,7 +70,6 @@ export class ReimbDaoImpl implements ReimbDao{
             
         try {
             //copy, approve, and replace the correct reimbursement
-            console.log(reimb.id)
             const tempReimb:Reimb = reimbs.find(r => r.id === reimb.id);
             tempReimb.status = ReimbursementStatus.approved;
             reimbs[reimbs.findIndex(r => r.id == tempReimb.id)] = tempReimb;
