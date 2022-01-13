@@ -23,6 +23,5 @@ export interface Reimb{
     desc:string,
     amount:number,
     //status:ReimbursementStatus
-    //defunct until i learn how to pass enums through html
     status:string
 }

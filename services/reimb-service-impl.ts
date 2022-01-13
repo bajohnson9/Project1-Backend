@@ -26,5 +26,8 @@ export class ReimbServiceImpl implements ReimbService{
     svcApprove(reimb: Reimb): Promise<Reimb[]> {
         return this.reimbDao.approveReimb(reimb);
     }
+    svcDeny(reimb: Reimb): Promise<Reimb[]> {
+        return this.reimbDao.denyReimb(reimb);
+    }
     
 }

@@ -5,4 +5,5 @@ export interface ReimbService{
     svcAddReimb(reimb:Reimb):Promise<Reimb>
     svcDelReimb(reimb:Reimb):Promise<Reimb[]>
     svcApprove(reimb:Reimb):Promise<Reimb[]>
+    svcDeny(reimb:Reimb):Promise<Reimb[]>
 }

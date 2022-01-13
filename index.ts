@@ -8,10 +8,11 @@ import { ReimbDao } from './daos/reimb-dao';
 import { ReimbDaoImpl } from './daos/reimb-dao-impl';
 import { ReimbService } from './services/reimb-service';
 import { ReimbServiceImpl } from './services/reimb-service-impl';
-
+import cors from 'cors';
 
 const app = express();
 app.use(express.json());
+app.use(cors());
 
 const userDao:UserDao = new UserDaoImpl();
 const userSvc:UserService = new UserServiceImpl(userDao);//dependency injection
@@ -62,12 +63,18 @@ app.delete("/reimbs", async (req,res) =>{
     res.send(reimbs);
 })
 //approve a reimbursement
-app.patch("/reimbs", async (req,res) =>{
+app.patch("/reimbs/approve", async (req,res) =>{
     const reimb:Reimb = req.body;
     const reimbs:Reimb[] = await reimbSvc.svcApprove(reimb);
     res.status(201);
     res.send(reimbs);
-
+})
+//deny a reimbursement
+app.patch("/reimbs/deny", async (req,res) =>{
+    const reimb:Reimb = req.body;
+    const reimbs:Reimb[] = await reimbSvc.svcDeny(reimb);
+    res.status(201);
+    res.send(reimbs);
 })
 
 app.listen(5000,()=>console.log("well, it ran"))

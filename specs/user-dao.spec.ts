@@ -23,7 +23,14 @@ describe("User get test", ()=>{
         const users = await userDao.getAllUsers();
         const l = users.length; 
         //need to import as an array (or is it an object with a name or is it the bgael)
-        const user1:User = {username:'testmgr',password:'password',id:'',isAuthenticated:true,isManager:true,reimbs:['001']}
+        const user1:User = {
+            username:'testmgr',
+            password:'password',
+            id:'',
+            isAuthenticated:true,
+            isManager:true,
+            reimbs:['001']
+        }
         const user2:User = {username:'testemp',password:'password',id:'',isAuthenticated:true,isManager:false,reimbs:['002','003']}
         //test without reimbs/other vars                      ---------------                       test without reimbs/other vars
         const user3:User = {username:'testhacker',password:'password',id:'',isAuthenticated:false,isManager:false,reimbs:[]}

@@ -31,7 +31,6 @@ export class ReimbDaoImpl implements ReimbDao{
         const file = await readFile('C:\\Users\\brook\\Documents\\REVATURE LAPTOP\\project1\\P1 Backend\\Project1-Backend\\reimbursements.json');
         const text:string = file.toString();
         const reimbs:Reimb[] = JSON.parse(text);
-        console.log(reimbs)
         return reimbs;
 
         } catch (error) {
@@ -48,8 +47,8 @@ export class ReimbDaoImpl implements ReimbDao{
         // MOVE THIS TO SERVICES but dont break it
         try {
         //get the reimb to be deleted
-        const tempReimb:Reimb = reimbs.find(r => r.desc === reimb.desc);
-        const desc = tempReimb.desc; //unused?
+        const tempReimb:Reimb = reimbs.find(r => r.id === reimb.id);
+        
         //if not null, shift values AFTER this one up (covering it), reduce length by 1
         if(tempReimb.id === reimb.id){
             for(let i = reimbs.indexOf(tempReimb);i < reimbs.length; i++) reimbs[i] = reimbs[i+1];
@@ -69,13 +68,45 @@ export class ReimbDaoImpl implements ReimbDao{
         const reimbs:Reimb[] = JSON.parse(text);
             
         try {
-            //copy, approve, and replace the correct reimbursement
+            //copy the item to be approved and approve it
             const tempReimb:Reimb = reimbs.find(r => r.id === reimb.id);
             tempReimb.status = ReimbursementStatus.approved;
-            reimbs[reimbs.findIndex(r => r.id == tempReimb.id)] = tempReimb;
+            console.log(tempReimb)
+            console.log(reimbs[reimbs.findIndex(r => r.id == tempReimb.id)])
+
+            //copy reimbs, put the approved item in
+            const tempReimbs = reimbs;
+            tempReimbs[tempReimbs.findIndex(r => r.id == tempReimb.id)] = tempReimb;
+            
+            await writeFile('C:\\Users\\brook\\Documents\\REVATURE LAPTOP\\project1\\P1 Backend\\Project1-Backend\\reimbursements.json',JSON.stringify(tempReimbs))
 
         } catch (error) {
             console.error("couldn't approve reimb :(")
+        }
+
+        return reimbs;
+    }
+
+    async denyReimb(reimb: Reimb): Promise<Reimb[]> {
+        const file = await readFile('C:\\Users\\brook\\Documents\\REVATURE LAPTOP\\project1\\P1 Backend\\Project1-Backend\\reimbursements.json');
+        const text:string = file.toString();
+        const reimbs:Reimb[] = JSON.parse(text);
+            
+        try {
+            //copy the item to be approved and approve it
+            const tempReimb:Reimb = reimbs.find(r => r.id === reimb.id);
+            tempReimb.status = ReimbursementStatus.denied;
+            console.log(tempReimb)
+            console.log(reimbs[reimbs.findIndex(r => r.id == tempReimb.id)])
+
+            //copy reimbs, put the approved item in
+            const tempReimbs = reimbs;
+            tempReimbs[tempReimbs.findIndex(r => r.id == tempReimb.id)] = tempReimb;
+            
+            await writeFile('C:\\Users\\brook\\Documents\\REVATURE LAPTOP\\project1\\P1 Backend\\Project1-Backend\\reimbursements.json',JSON.stringify(tempReimbs))
+
+        } catch (error) {
+            console.error("couldn't deny reimb :(")
         }
 
         return reimbs;
