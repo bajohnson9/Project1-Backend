@@ -16,6 +16,10 @@ describe("Get reimb test", ()=>{
     it("Should create a Reimb", async ()=>{
         const returnedReimb: Reimb = await reimbDao.createReimb(testReimb);
         expect(returnedReimb.id).toBeTruthy();
+        expect(returnedReimb.type).toBeTruthy();
+        expect(returnedReimb.desc).toBeTruthy();
+        expect(returnedReimb.amount).toBeTruthy();
+        expect(returnedReimb.status).toBeTruthy();
     })
 
     it("Should return all reimbs", async ()=>{
@@ -27,8 +31,8 @@ describe("Get reimb test", ()=>{
         await reimbDao.createReimb(r4)
 
         const finalReimbs: Reimb[] = await reimbDao.getAllReimbs();
+        expect(l).toBeGreaterThanOrEqual(0);
         expect(finalReimbs.length).toBe(l + 2);
-        
     })
 
     it("Should delete a reimbursement", async ()=>{
@@ -40,7 +44,9 @@ describe("Get reimb test", ()=>{
         await reimbDao.delReimb(reimbs.find(r => r.amount === 31475844853))
         
         const reimbs2 = await reimbDao.getAllReimbs();
-        expect(reimbs.length).toBe(reimbs2.length + 3);
+        
+        expect(reimbs2.length).toBe(reimbs.length - 3);
+
 
     })
 
@@ -52,8 +58,11 @@ describe("Get reimb test", ()=>{
         await reimbDao.approveReimb(r1);
         //make sure it approved
         reimbs = await reimbDao.getAllReimbs();
+
+        expect(reimbs[reindex].id).toBeTruthy();
         expect(reimbs[reindex].status).toBe("approved")
             
+        //cleanup
         await reimbDao.delReimb(reimbs.find(r => r.amount === 51))
     })
 
@@ -65,8 +74,10 @@ describe("Get reimb test", ()=>{
         await reimbDao.denyReimb(r2);
 
         reimbs = await reimbDao.getAllReimbs();
+        expect(reimbs[reindex].id).toBeTruthy();
         expect(reimbs[reindex].status).toBe("denied")
         
+
         await reimbDao.delReimb(reimbs.find(r => r.amount === 5000000))
         
     })
