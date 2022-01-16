@@ -1,1 +1,1 @@
-[{"id":"32e70647-3fba-479a-84bb-4dd48e206a13","type":"Stolen goods","desc":"250 oz of treasure stolen","amount":545257.59,"status":"denied"}]
+[{"user":{"username":"","password":"","id":"b61f2c25-e38e-4a51-a54b-ba30d6ca33fd","isAuthenticated":false,"isManager":false,"reimbs":[]},"reimb":{"id":"","type":"type","desc":"desc","amount":"5","status":"pending"},"id":"89e4bcb7-f7e3-45ec-a362-44961c02e95c","status":"denied"},{"id":"862206e6-17c4-43f4-9f11-6ee5fe316314","type":"type","desc":"desc","amount":"5","status":"pending"}]

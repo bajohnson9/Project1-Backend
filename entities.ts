@@ -25,3 +25,8 @@ export interface Reimb{
     //status:ReimbursementStatus
     status:string
 }
+
+export interface addRequest{
+    user:User;
+    reimb:Reimb;
+}

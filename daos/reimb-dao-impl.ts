@@ -11,6 +11,7 @@ export class ReimbDaoImpl implements ReimbDao{
         const text:string = file.toString();
         const reimbs:Reimb[] = JSON.parse(text);
         
+        //add an ID and push
         try{
         reimb.id = v4();
         reimbs.push(reimb);
@@ -71,8 +72,6 @@ export class ReimbDaoImpl implements ReimbDao{
             //copy the item to be approved and approve it
             const tempReimb:Reimb = reimbs.find(r => r.id === reimb.id);
             tempReimb.status = ReimbursementStatus.approved;
-            console.log(tempReimb)
-            console.log(reimbs[reimbs.findIndex(r => r.id == tempReimb.id)])
 
             //copy reimbs, put the approved item in
             const tempReimbs = reimbs;
@@ -83,7 +82,6 @@ export class ReimbDaoImpl implements ReimbDao{
         } catch (error) {
             console.error("couldn't approve reimb :(")
         }
-
         return reimbs;
     }
 
@@ -96,8 +94,6 @@ export class ReimbDaoImpl implements ReimbDao{
             //copy the item to be approved and approve it
             const tempReimb:Reimb = reimbs.find(r => r.id === reimb.id);
             tempReimb.status = ReimbursementStatus.denied;
-            console.log(tempReimb)
-            console.log(reimbs[reimbs.findIndex(r => r.id == tempReimb.id)])
 
             //copy reimbs, put the approved item in
             const tempReimbs = reimbs;

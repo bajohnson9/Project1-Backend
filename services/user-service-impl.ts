@@ -1,5 +1,5 @@
 import { UserDao } from "../daos/user-dao";
-import { User } from "../entities";
+import { Reimb, User } from "../entities";
 import { UserService } from "./user-service";
 
 export class UserServiceImpl implements UserService{
@@ -22,18 +22,11 @@ export class UserServiceImpl implements UserService{
     svcDelUser(user: User): Promise<User[]> {
         return this.userDao.delUser(user);
     }
-    /*
-    async svcLogin(user: User): Promise<User> {
-        const users:User[] = await this.userDao.getAllUsers();
-        const username = "manager";
-        const password = "password";
-        
-        let tempUser = users.find(u => (u.username === username));
-        if(tempUser.password === password){
-            tempUser.isAuthenticated = true;
-        }
+    svcLogin(user: User): Promise<User> {
         //or maybe return a boolean
-        return tempUser;
+        return this.userDao.login(user);
     }
-    */
+    svcAddReimb(user: User, reimb:Reimb): Promise<User> {
+        return this.userDao.addReimbToUser(user,reimb);    
+    }
 }

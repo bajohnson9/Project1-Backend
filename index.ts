@@ -1,7 +1,7 @@
 import express from 'express';
 import { UserDao } from './daos/user-dao';
 import { UserDaoImpl } from './daos/user-dao-impl';
-import { Reimb, User } from './entities';
+import { addRequest, Reimb, User } from './entities';
 import { UserServiceImpl } from './services/user-service-impl';
 import { UserService } from './services/user-service';
 import { ReimbDao } from './daos/reimb-dao';
@@ -9,8 +9,6 @@ import { ReimbDaoImpl } from './daos/reimb-dao-impl';
 import { ReimbService } from './services/reimb-service';
 import { ReimbServiceImpl } from './services/reimb-service-impl';
 import cors from 'cors';
-import { LoginService } from './services/login-service';
-import { LoginServiceImpl } from './services/login-service-impl';
 
 const app = express();
 app.use(express.json());
@@ -19,13 +17,15 @@ app.use(cors());
 const userDao:UserDao = new UserDaoImpl();
 const userSvc:UserService = new UserServiceImpl(userDao);//dependency injection
 const reimbDao:ReimbDao = new ReimbDaoImpl();
-const reimbSvc:ReimbService = new ReimbServiceImpl(reimbDao);//dependency injection
-const loginSvc:LoginService = new LoginServiceImpl(userDao);//
+const reimbSvc:ReimbService = new ReimbServiceImpl(reimbDao);//
+
 
 //USER/LOGIN STUFF?
 app.get("/login", async(req,res) =>{
     const user:User = req.body;
-    const returnedUser:User = await loginSvc.svcLogin(user);
+    const returnedUser:User = await userSvc.svcLogin(user);
+    res.status(200)
+    res.send(returnedUser);
 })
 //post a user
 app.post("/users", async (req,res)=>{
@@ -47,14 +47,28 @@ app.delete("/users", async (req,res) =>{
     res.status(202);
     res.send(users);
 })
+//add reimb to user
+app.patch("/users/reimbs", async (req,res) =>{
+    const request:addRequest = req.body;
+    const user = request.user;
+    const reimb = request.reimb;
+    const returnedUser = await userSvc.svcAddReimb(user,reimb);
+    res.status(202);
+    res.send(user);
+})
 
 //REIMBURSEMENTS
 //post a reimbursement
 app.post("/reimbs", async (req,res)=>{
-    const reimb:Reimb = req.body;
-    const returnedReimb:Reimb = await reimbSvc.svcAddReimb(reimb);
+    const users:User[] = await userSvc.svcGetAllUsers();
+    const addr:addRequest = req.body;
+    let reimb = addr.reimb;
+    let user = addr.user;
+    reimb = await reimbSvc.svcAddReimb(reimb);
+    user = await userSvc.svcAddReimb(user, reimb);
+    console.log(addr);
     res.status(201);
-    res.send(returnedReimb);
+    res.send(reimb);
 })
 //get all reimbursements
 app.get("/reimbs", async (req,res) =>{
