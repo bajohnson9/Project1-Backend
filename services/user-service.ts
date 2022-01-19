@@ -6,4 +6,6 @@ export interface UserService{
     svcDelUser(user:User):Promise<User[]>
     svcLogin(user:User):Promise<User>
     svcAddReimb(user:User,reimb:Reimb):Promise<User>
+    getUserByID(id: string): Promise<User>
+    getStats(): Promise<string[]>
 }

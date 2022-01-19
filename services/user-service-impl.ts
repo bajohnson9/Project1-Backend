@@ -23,10 +23,15 @@ export class UserServiceImpl implements UserService{
         return this.userDao.delUser(user);
     }
     svcLogin(user: User): Promise<User> {
-        //or maybe return a boolean
         return this.userDao.login(user);
     }
     svcAddReimb(user: User, reimb:Reimb): Promise<User> {
         return this.userDao.addReimbToUser(user,reimb);    
+    }
+    getUserByID(id:string): Promise<User> {
+        return this.userDao.getUserByID(id);
+    }
+    getStats(): Promise<string[]> {
+        return this.userDao.getStats();
     }
 }

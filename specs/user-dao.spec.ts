@@ -12,12 +12,11 @@ describe("User get test", ()=>{
     
     
 
-    it("Should create a User", async ()=>{
+    it("Should create and get a User", async ()=>{
         const returnedUser: User = await userDao.createUser(testUser);
         expect(returnedUser.id).toBeTruthy();
-        //redundant comment vv
-        //to use in later tests vvv AKA redundant
-        testUser = returnedUser;
+
+        testUser = await userDao.getUserByID(returnedUser.id);
     })
 
     it("Should return all users", async ()=>{
@@ -90,6 +89,10 @@ describe("User get test", ()=>{
     
     it("Should NOT log in when the password is incorrect", async ()=>{
         expect(await userDao.login({username:'',password:'',id:'',isAuthenticated:false,isManager:false,reimbs:[]})).not.toBeTruthy();
+    })
+
+    it("Should get he stats", async ()=>{
+        expect(await userDao.getStats()).toHaveLength
     })
 
     it("Should clean up the leftovers :)", async ()=>{

@@ -21,7 +21,7 @@ const reimbSvc:ReimbService = new ReimbServiceImpl(reimbDao);//
 
 
 //USER/LOGIN STUFF?
-app.get("/login", async(req,res) =>{
+app.patch("/login", async(req,res) =>{
     const user:User = req.body;
     const returnedUser:User = await userSvc.svcLogin(user);
     res.status(200)
@@ -33,6 +33,12 @@ app.post("/users", async (req,res)=>{
     const returnedUser:User = await userSvc.svcAddUser(user);
     res.status(201);
     res.send(returnedUser);
+})
+//get user by id
+app.get("/users/:id", async (req,res) =>{
+    const returnedUser = await userSvc.getUserByID(req.params.id);
+    res.send(200);
+    res.send(returnedUser)
 })
 //get all users
 app.get("/users", async (req,res) =>{
@@ -55,6 +61,11 @@ app.patch("/users/reimbs", async (req,res) =>{
     const returnedUser = await userSvc.svcAddReimb(user,reimb);
     res.status(202);
     res.send(user);
+})
+app.get("/stats", async (req,res) =>{
+    const response = await userSvc.getStats();
+    res.status(200);
+    res.send(response);
 })
 
 //REIMBURSEMENTS
