@@ -13,9 +13,10 @@ export class ReimbDaoImpl implements ReimbDao{
         
         //add an ID and push
         try{
-        if(!reimbs.find(r => r.id === reimb.id)) 
+        if(!reimbs.find(r => r.id === reimb.id)) {
             reimb.id = v4();
-        reimbs.push(reimb);
+            reimbs.push(reimb);
+        }
         } catch (error) {
             console.error("cannot create reimb :(")
         }

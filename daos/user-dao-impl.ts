@@ -12,9 +12,10 @@ export class UserDaoImpl implements UserDao{
         const users:User[] = JSON.parse(text);
 
         try {
-        if(!users.find(u => u.id === user.id)) 
+        if(!users.find(u => u.id === user.id)) {
             user.id = v4();
-        users.push(user);
+            users.push(user);
+        }
         
         } catch (error) {
             console.error("cannot create user :(")
@@ -78,10 +79,13 @@ export class UserDaoImpl implements UserDao{
         const tempUser:User = users.find(r => r.username === user.username);
         
         //if not null, shift values AFTER this one up (covering it), reduce length by 1
-        if(tempUser.username == user.username){
-            for(let i = users.indexOf(tempUser);i < users.length; i++) users[i] = users[i+1];
-            users.length = users.length - 1;
+        console.log("B4::::::::::::::::::::::::::::::::::::" + users);
+        if(tempUser.username){
+            users.forEach((element,index)=>{
+                if(element.username==tempUser.username) users.splice(index,1);
+            });
         }
+        console.log("AFTA::::::::::::::::::::::::::::::::::" + users);
         } catch (error) {
             console.error("cannot create user :(")
         }
@@ -94,6 +98,8 @@ export class UserDaoImpl implements UserDao{
         const file = await readFile('C:\\Users\\brook\\Documents\\REVATURE LAPTOP\\project1\\P1 Backend\\Project1-Backend\\users.json');
         const text:string = file.toString();
         const users:User[] = JSON.parse(text);
+        console.log(user)
+        console.log(users)
 
         try{
         //find the correct user in the database
@@ -107,7 +113,7 @@ export class UserDaoImpl implements UserDao{
     }
 
     async getStats(): Promise<string[]> {
-        console.log('is it even starting')
+        
         let stats:string[] = [];
         //get users
         let file = await readFile('C:\\Users\\brook\\Documents\\REVATURE LAPTOP\\project1\\P1 Backend\\Project1-Backend\\users.json');
@@ -117,12 +123,10 @@ export class UserDaoImpl implements UserDao{
         file = await readFile('C:\\Users\\brook\\Documents\\REVATURE LAPTOP\\project1\\P1 Backend\\Project1-Backend\\reimbursements.json');
         text = file.toString();
         const reimbs:Reimb[] = JSON.parse(text);
-        console.log("WOW you made it pretty far, here's a gift: " +reimbs[1] )
         //come up with some whacky statistics!!!
         //maybe change this one to a sort
         let biggestAmt:Reimb = {...reimbs[0]};
         reimbs.forEach(r => {if(biggestAmt.amount < r.amount){biggestAmt = r}});
-        console.log(biggestAmt)
         stats.push("Reimbursement with the highest value: " + biggestAmt.desc)
         return(stats);
     }

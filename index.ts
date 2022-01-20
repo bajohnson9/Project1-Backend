@@ -19,14 +19,6 @@ const userSvc:UserService = new UserServiceImpl(userDao);//dependency injection
 const reimbDao:ReimbDao = new ReimbDaoImpl();
 const reimbSvc:ReimbService = new ReimbServiceImpl(reimbDao);//
 
-
-//USER/LOGIN STUFF?
-app.patch("/login", async(req,res) =>{
-    const user:User = req.body;
-    const returnedUser:User = await userSvc.svcLogin(user);
-    res.status(200)
-    res.send(returnedUser);
-})
 //post a user
 app.post("/users", async (req,res)=>{
     const user:User = req.body;
@@ -37,8 +29,10 @@ app.post("/users", async (req,res)=>{
 //get user by id
 app.get("/users/:id", async (req,res) =>{
     const returnedUser = await userSvc.getUserByID(req.params.id);
-    res.send(200);
-    res.send(returnedUser)
+    try{
+        res.send(200);
+        res.send(returnedUser)
+    } catch(error) {console.error("problem sending status/header in user by id")}
 })
 //get all users
 app.get("/users", async (req,res) =>{
@@ -62,6 +56,13 @@ app.patch("/users/reimbs", async (req,res) =>{
     res.status(202);
     res.send(user);
 })
+//USER/LOGIN STUFF?
+app.patch("/login", async(req,res) =>{
+    const user:User = req.body;
+    const returnedUser:User = await userSvc.svcLogin(user);
+    res.status(200)
+    res.send(returnedUser);
+})
 app.get("/stats", async (req,res) =>{
     const response = await userSvc.getStats();
     res.status(200);
@@ -72,12 +73,11 @@ app.get("/stats", async (req,res) =>{
 //post a reimbursement
 app.post("/reimbs", async (req,res)=>{
     const users:User[] = await userSvc.svcGetAllUsers();
-    const addr:addRequest = req.body;
-    let reimb = addr.reimb;
-    let user = addr.user;
+    const request:addRequest = req.body;
+    let reimb = request.reimb;
+    let user = request.user;
     reimb = await reimbSvc.svcAddReimb(reimb);
-    user = await userSvc.svcAddReimb(user, reimb);
-    console.log(addr);
+    console.log(request);
     res.status(201);
     res.send(reimb);
 })

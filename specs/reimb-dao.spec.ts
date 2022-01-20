@@ -1,8 +1,7 @@
 import { ReimbDao } from "../daos/reimb-dao";
 import { ReimbDaoImpl } from "../daos/reimb-dao-impl";
-import { UserDaoImpl } from "../daos/user-dao-impl";
 import { Reimb } from "../entities";
-import { UserServiceImpl } from "../services/user-service-impl";
+
 
 describe("Get reimb test", ()=>{
     const reimbDao: ReimbDao = new ReimbDaoImpl;
@@ -24,7 +23,7 @@ describe("Get reimb test", ()=>{
 
     it("Should return all reimbs", async ()=>{
         
-        const reimbs = await reimbDao.getAllReimbs();
+        const reimbs:Reimb[] = await reimbDao.getAllReimbs();
         const l = reimbs.length;
 
         await reimbDao.createReimb(r3)
