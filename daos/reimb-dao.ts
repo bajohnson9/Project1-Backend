@@ -4,6 +4,6 @@ export interface ReimbDao{
     createReimb(reimb:Reimb): Promise<Reimb>
     getAllReimbs(): Promise<Reimb[]>
     delReimb(reimb:Reimb): Promise<Reimb[]>
-    approveReimb(reimb:Reimb): Promise<Reimb[]>
-    denyReimb(reimb:Reimb): Promise<Reimb[]>
+    approveReimb(reimb:Reimb): Promise<Reimb>
+    denyReimb(reimb:Reimb): Promise<Reimb>
 }

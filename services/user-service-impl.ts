@@ -25,8 +25,10 @@ export class UserServiceImpl implements UserService{
     svcLogin(user: User): Promise<User> {
         return this.userDao.login(user);
     }
-    svcAddReimb(user: User, reimb:Reimb): Promise<User> {
-        return this.userDao.addReimbToUser(user,reimb);    
+    svcAddReimbToUser(user: User, reimb:Reimb): Promise<User> {
+        user.reimbs.push(reimb.id);
+        console.log(user);
+        return this.userDao.updateUser(user);    
     }
     getUserByID(id:string): Promise<User> {
         return this.userDao.getUserByID(id);

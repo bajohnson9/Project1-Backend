@@ -8,6 +8,7 @@ import { ReimbDao } from './daos/reimb-dao';
 import { ReimbDaoImpl } from './daos/reimb-dao-impl';
 import { ReimbService } from './services/reimb-service';
 import { ReimbServiceImpl } from './services/reimb-service-impl';
+import { CosmosClient } from '@azure/cosmos';
 import cors from 'cors';
 
 const app = express();
@@ -49,15 +50,27 @@ app.delete("/users", async (req,res) =>{
 })
 //add reimb to user
 app.patch("/users/reimbs", async (req,res) =>{
+    //make sure the user fragment has all its information
+    const users:User[] = await userSvc.svcGetAllUsers();
+    const reimbs:Reimb[] = await reimbSvc.svcGetAllReimbs();
     const request:addRequest = req.body;
-    const user = request.user;
+    let user = await userSvc.getUserByID(request.user.id)
     const reimb = request.reimb;
-    const returnedUser = await userSvc.svcAddReimb(user,reimb);
+    //update
+    const returnedUser = await userSvc.svcAddReimbToUser(user,reimb);
     res.status(202);
     res.send(user);
 })
 //USER/LOGIN STUFF?
 app.patch("/login", async(req,res) =>{
+    const user:User = req.body;
+    const returnedUser:User = await userSvc.svcLogin(user);
+    res.status(200)
+    res.send(returnedUser);
+})
+//duplicate login? unnecessary?
+//USER/LOGIN STUFF?
+app.patch("", async(req,res) =>{
     const user:User = req.body;
     const returnedUser:User = await userSvc.svcLogin(user);
     res.status(200)
@@ -72,11 +85,15 @@ app.get("/stats", async (req,res) =>{
 //REIMBURSEMENTS
 //post a reimbursement
 app.post("/reimbs", async (req,res)=>{
+    //make sure user has all its info
     const users:User[] = await userSvc.svcGetAllUsers();
     const request:addRequest = req.body;
+    let user = users.find(u => u.username === request.user.username)
+    //get reimb too
     let reimb = request.reimb;
-    let user = request.user;
+    //create reimb, then add it
     reimb = await reimbSvc.svcAddReimb(reimb);
+    user = await userSvc.svcAddReimbToUser(user,reimb);
     console.log(request);
     res.status(201);
     res.send(reimb);
@@ -97,16 +114,16 @@ app.delete("/reimbs", async (req,res) =>{
 //approve a reimbursement
 app.patch("/reimbs/approve", async (req,res) =>{
     const reimb:Reimb = req.body;
-    const reimbs:Reimb[] = await reimbSvc.svcApprove(reimb);
+    const returnedReimb:Reimb = await reimbSvc.svcApprove(reimb);
     res.status(201);
-    res.send(reimbs);
+    res.send(returnedReimb);
 })
 //deny a reimbursement
 app.patch("/reimbs/deny", async (req,res) =>{
     const reimb:Reimb = req.body;
-    const reimbs:Reimb[] = await reimbSvc.svcDeny(reimb);
+    const returnedReimb:Reimb = await reimbSvc.svcDeny(reimb);
     res.status(201);
-    res.send(reimbs);
+    res.send(returnedReimb);
 })
 
 

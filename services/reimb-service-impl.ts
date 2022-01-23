@@ -19,14 +19,16 @@ export class ReimbServiceImpl implements ReimbService{
         return this.reimbDao.createReimb(reimb);
     }
 
+    //svcGetReimbByID(id: string): Promise<Reimb> {        return this.reimbDao.getReimbByID(id);            }
+
     svcDelReimb(reimb: Reimb): Promise<Reimb[]> {
         return this.reimbDao.delReimb(reimb);
     }
 
-    svcApprove(reimb: Reimb): Promise<Reimb[]> {
+    svcApprove(reimb: Reimb): Promise<Reimb> {
         return this.reimbDao.approveReimb(reimb);
     }
-    svcDeny(reimb: Reimb): Promise<Reimb[]> {
+    svcDeny(reimb: Reimb): Promise<Reimb> {
         return this.reimbDao.denyReimb(reimb);
     }
     
