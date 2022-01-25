@@ -1,4 +1,4 @@
-import { Reimb, ReimbursementStatus } from "../entities";
+import { Reimb, ReimbursementStatus, User } from "../entities";
 import { ReimbDao } from "./reimb-dao";
 import { readFile, writeFile } from 'fs/promises';
 import { v4 } from "uuid";
@@ -8,6 +8,7 @@ import { CosmosClient } from "@azure/cosmos";
 const client = new CosmosClient(process.env.P1_COSMOS_DB);
 const DB = client.database('project1-bajohnson');
 const reimbsContainer = DB.container('reimbs')
+const usersContainer = DB.container('users')
 
 export class ReimbDaoImpl implements ReimbDao{
 
@@ -26,7 +27,7 @@ export class ReimbDaoImpl implements ReimbDao{
     async getAllReimbs(): Promise<Reimb[]> {
         try{
             const response = await reimbsContainer.items.readAll<Reimb>().fetchAll();
-            const reimbs:Reimb[] = response.resources;
+            const reimbs:Reimb[] = response.resources ?? [];
             return reimbs;
 
         } catch (error) {
@@ -39,9 +40,19 @@ export class ReimbDaoImpl implements ReimbDao{
         try {
             const delResponse = await reimbsContainer.item(reimb.id,reimb.id).delete<Reimb>()
 
-            //get all users again for the return
-            const response = await reimbsContainer.items.readAll<Reimb>().fetchAll();
-            const reimbs:Reimb[] = response.resources;
+            //remove reimb ID from all users
+            const userResponse = await usersContainer.items.readAll<User>().fetchAll();
+            const users:User[] = userResponse.resources ?? [];
+            users.forEach(r => {
+                if(r.reimbs.find(r => r === reimb.id)) {
+                    // doesn't really delete it but ill do that later
+                    r.reimbs[r.reimbs.findIndex(r => r === reimb.id)] = "";
+                }
+            })
+
+            //get all reimbs for the return
+            const reimbResponse = await reimbsContainer.items.readAll<Reimb>().fetchAll();
+            const reimbs:Reimb[] = reimbResponse.resources;
             return reimbs;
             
         } catch(error) {console.error(error)}

@@ -67,7 +67,7 @@ export class UserDaoImpl implements UserDao{
             const users:User[] = response.resources;
         
             //find the correct user in the database
-            let tempUser:User = users.find(u => u.username === user.username);
+            let tempUser:User = users.find(u => u.username === user.username) ?? user;
             if(tempUser.password === user.password) { 
                 tempUser = {...tempUser, isAuthenticated:true};
                 await usersContainer.items.upsert<User>(tempUser);
