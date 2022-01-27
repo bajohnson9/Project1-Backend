@@ -5,7 +5,7 @@ import { v4 } from "uuid";
 import { Container, CosmosClient } from "@azure/cosmos";
 
 //cosmos setup 
-const client = new CosmosClient("AccountEndpoint=https://rpas-cosmosdb-account-bj.documents.azure.com:443/;AccountKey=n1tabnIm5g3iBMx1CAN2zqRN4bHVlRI8jFXaIszIOVgrB8Wqo35AtLB3Gj1ruIEhS9BYQcmLSclRKyOmpVMuJg==;");
+const client = new CosmosClient(process.env.P1_COSMOS_DB);
 const DB = client.database('project1-bajohnson');
 const usersContainer = DB.container('users')
 const reimbsContainer = DB.container('reimbs')
