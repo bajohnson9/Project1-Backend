@@ -27,7 +27,6 @@ export class UserServiceImpl implements UserService{
     }
     svcAddReimbToUser(user: User, reimb:Reimb): Promise<User> {
         user.reimbs.push(reimb.id);
-        console.log(user);
         return this.userDao.updateUser(user);    
     }
     getUserByID(id:string): Promise<User> {

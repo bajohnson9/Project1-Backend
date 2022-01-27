@@ -94,7 +94,6 @@ app.post("/reimbs", async (req,res)=>{
     //create reimb, then add it
     reimb = await reimbSvc.svcAddReimb(reimb);
     user = await userSvc.svcAddReimbToUser(user,reimb);
-    console.log(request);
     res.status(201);
     res.send(reimb);
 })
