@@ -68,7 +68,7 @@ export class ReimbDaoImpl implements ReimbDao{
             })
             return reimbs;
             
-        } catch(error) {log.error(reimbError, "Problem deleting reimb")}
+        } catch(error) {log.error(reimbError, "Problem deleting reimb: " + reimb)}
     }
 
     async approveReimb(reimb: Reimb): Promise<Reimb> {
@@ -86,7 +86,7 @@ export class ReimbDaoImpl implements ReimbDao{
             return tempReimb;
 
         } catch (error) {
-            log.error(reimbError, "couldn't approve reimb :(")
+            log.error(reimbError, "couldn't approve reimb: " + reimb)
         }
         
     }
@@ -105,7 +105,7 @@ export class ReimbDaoImpl implements ReimbDao{
             return tempReimb;
 
         } catch (error) {
-            log.error(reimbError, "couldn't approve reimb :(")
+            log.error(reimbError, "couldn't approve reimb: " + reimb)
         }
     }
 }
