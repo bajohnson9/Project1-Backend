@@ -68,7 +68,7 @@ export class ReimbDaoImpl implements ReimbDao{
             })
             return reimbs;
             
-        } catch(error) {log.error(reimbError, "Problem deleting reimb: " + reimb)}
+        } catch(error) {log.error(reimbError, "Problem deleting: " + reimb)}
     }
 
     async approveReimb(reimb: Reimb): Promise<Reimb> {
