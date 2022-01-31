@@ -125,12 +125,14 @@ export class UserDaoImpl implements UserDao{
         let highestAmtUser:User = users.find(u => (u.reimbs.includes(highestAmt.id)))
         stats.push(`${highestAmtUser.username} has the highest costing reimbursement at $${highestAmt.amount}!`)
 
-        //HIGHEST NUMBER OF REIMBS
+        //HIGHEST NUMBER OF REIMBS heh maybe fix before showcasing
+        /*
         let mostReimbs:User = users[0];
         for(let i = 0; i < users.length; i++){
             if(mostReimbs.reimbs.length < users[i].reimbs.length) mostReimbs = users[i];
         }
         stats.push(`${mostReimbs.username} has the most reimbursements at ${mostReimbs.reimbs.length} reimbursements!`)
+        */
 
         //HIGHEST TOTAL COST AMONG REIMBS
         let highestTotalAmtUser:User = users[0];
